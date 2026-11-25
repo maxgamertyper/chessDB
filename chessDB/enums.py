@@ -1,5 +1,6 @@
 from enum import IntEnum, auto
 
 class CompressionType(IntEnum):
-    BIT_CONCATENATION = auto()
+    BIT_PACKING = auto()
     MIXED_RADIX = auto()
+    WEIGHTED_ARITHMETIC = auto()
