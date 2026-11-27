@@ -27,6 +27,6 @@ def read_chapter(study_id):
     print(out_data)
 
 if __name__ == "__main__":
-    #upload_chapter(bytearray(b"According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway, because bees don't care what humans think is impossible."), "bee")
-    #read_chapter("{USE THE LINK IT PRINTS TO THEN FIND WHAT CHAPTER TO USE}")
+    #upload_chapter(b"According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway, because bees don't care what humans think is impossible.", "beeBIT")
+    #read_chapter("{USE THE LINK TO CHECK THE CHAPTER ID}")
     pass

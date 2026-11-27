@@ -109,7 +109,7 @@ class EncodingTable:
             )
 
 class ChessEncoder:
-    def __init__(self, data: bytearray, fen: str = DEFAULT_FEN_NOTATION, compression_type: CompressionType = CompressionType.MIXED_RADIX, include_metadata: bool = True):
+    def __init__(self, data: bytes, fen: str = DEFAULT_FEN_NOTATION, compression_type: CompressionType = CompressionType.MIXED_RADIX, include_metadata: bool = True):
         self._board = chess.Board(fen)
         self._encode_data = STARTING_BYTE_SENTINEL + data
         self._include_metadata = include_metadata
@@ -177,6 +177,8 @@ class ChessEncoder:
 
         if self._compression_type == CompressionType.BIT_PACKING:
             usable_bits = self._count_legal_moves().bit_length() - 1
+            if usable_bits == 0:
+                return legal_moves[0]
         
             eaten_bits = self._get_next_bits(usable_bits)
             return legal_moves[eaten_bits]
@@ -414,4 +416,4 @@ class ChessDecoder:
 
         restored = bytearray(ba[1:])
 
-        return restored
+        return bytes(restored)
