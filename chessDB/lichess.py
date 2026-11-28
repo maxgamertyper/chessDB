@@ -10,13 +10,38 @@ class LichessBot:
         self._study_id = studyID
 
     def upload_table(self, encodingTable: codec.EncodingTable, chapter_name: str = None):
-        if chapter_name == None: chapter_name = encodingTable.id
+        splits = encodingTable.get_game_bounds(50000) # split games by ~50kb pgn files
+        chapters = []
+        split_number = 1
 
-        links = self._client.studies.import_pgn(
-            study_id = self._study_id,
-            chapter_name = chapter_name,
-            pgn = encodingTable.combined_pgn()
-        )
+        for start_game, end_game in splits:
+            print(split_number)
+            link = self._upload_individual(
+                encodingTable, 
+                start_game, 
+                end_game, 
+                f"{chapter_name} split: {split_number}"
+            )
+            chapters.append(link)
+            split_number += 1
+
+        return chapters
+
+
+    def _upload_individual(self, encodingTable, start, end, chapter_name):
+        if chapter_name == None: chapter_name = encodingTable.id
+        comb_pgn = encodingTable.combined_pgn(start, end)
+        print(comb_pgn)
+
+        try:
+            links = self._client.studies.import_pgn(
+                study_id=self._study_id,
+                chapter_name=chapter_name,
+                pgn=comb_pgn
+            )
+            print(links)
+        except berserk.exceptions.ResponseError as e:
+            print(f"Lichess API Error: {e}")
         print("There needs to be some checks here, but it works for now")
         return f"https://lichess.org/study/{self._study_id}/{links[0]["id"]}"
 

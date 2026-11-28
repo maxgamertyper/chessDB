@@ -25,8 +25,23 @@ def read_chapter(study_id):
     decoder = ChessDecoder(read_table)
     out_data = decoder.decodeData()
     print(out_data)
+    return out_data
+
+def read_file(file_name):
+    encode_data = None
+    with open(file_name, "rb") as f:
+        encode_data = f.read()
+    return encode_data
+
+def to_file(file_name, data):
+    with open (file_name, "wb") as f:
+        f.write(data)
 
 if __name__ == "__main__":
-    #upload_chapter(b"According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway, because bees don't care what humans think is impossible.", "beeBIT")
-    #read_chapter("{USE THE LINK TO CHECK THE CHAPTER ID}")
+
+    #upload_chapter(read_file("test.txt"), "file_test")
+    #to_file(
+    #    "output.txt",
+    #    read_chapter("{YOUR CHAPTER ID HERE}")
+    #)
     pass
