@@ -11,21 +11,27 @@ study_key = os.getenv("STUDY_KEY") #idk if this is bad to show or not
 bot = LichessBot(bot_token, study_key)
 
 def upload_chapter(encodearray, chapter_name):
-    encoder = ChessEncoder(encodearray, compression_type=CompressionType.BIT_PACKING)
+    encoder = ChessEncoder(encodearray, compression_type=CompressionType.MIXED_RADIX)
 
     table = encoder.calculateEncoding()
 
-    chapter_link = bot.upload_table(table, chapter_name)
-    print(chapter_link)
+    chapter_links = bot.upload_table(table, chapter_name)
+    print(chapter_links)
 
 
-def read_chapter(study_id):
-    read_table = bot.read_chapter(study_id)
+def read_chapter(chapter_id):
+    read_table = bot.read_chapter(chapter_id)
 
     decoder = ChessDecoder(read_table)
     out_data = decoder.decodeData()
     print(out_data)
     return out_data
+
+def read_chapters(chapter_ids):
+    read_table = bot.read_chapters(chapter_ids)
+
+    decoder = ChessDecoder(read_table)
+    return decoder.decodeData()
 
 def read_file(file_name):
     encode_data = None
@@ -39,9 +45,13 @@ def to_file(file_name, data):
 
 if __name__ == "__main__":
 
-    #upload_chapter(read_file("test.txt"), "file_test")
+    #upload_chapter(read_file("signature.png"), "signature")
     #to_file(
     #    "output.txt",
     #    read_chapter("{YOUR CHAPTER ID HERE}")
+    #)
+    #to_file(
+    #    "output.png",
+    #    read_chapters(["CHAPTER 1", "CHAPTER 2"])
     #)
     pass

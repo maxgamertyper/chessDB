@@ -2,3 +2,5 @@
 .vscode/
 test.py
 chessDB/__pycache__/
+test.png
+output.png

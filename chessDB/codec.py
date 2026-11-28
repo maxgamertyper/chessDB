@@ -64,29 +64,35 @@ class EncodingTable:
 
         return len(pgn.encode("utf-8"))
 
-    def get_game_bounds(self, size: int):
+    def get_game_bounds(self, size: int, moves: int):
         estimated_overhead_per_move = 6
         # this is for extra periods, spaces, numbers, etc that happen when doing a pgn
         running_count = self._get_starting_pgn_length()
+        running_moves = 0
         current_start = 1
         game_number = 1
         game_bounds = []
         current_game_size = 0
+        current_move_count = 0
 
         for move in self.moves:
-            move_size = len(move.encode("utf-8"))
-            current_game_size += move_size + estimated_overhead_per_move
-
             if move == self.game_end_sentinel:
                 running_count += current_game_size
+                running_moves += current_move_count
                 
-                if running_count > size:
+                if running_count > size or running_moves > moves:
                     game_bounds.append((current_start, game_number - 1))
                     current_start = game_number
                     running_count = current_game_size + self._get_starting_pgn_length()
+                    running_moves = current_move_count
 
                 game_number += 1
                 current_game_size = 0
+                current_move_count = 0
+
+            move_size = len(move.encode("utf-8"))
+            current_move_count+=1
+            current_game_size += move_size + estimated_overhead_per_move
 
         if current_start < game_number:
             game_bounds.append((current_start, game_number - 1))
@@ -115,7 +121,7 @@ class EncodingTable:
                     node = node.add_variation(stack_move)
             board.reset()
 
-        start = self._game_indexes[first_game-1] if first_game > 1 else 0
+        start = self._game_indexes[first_game - 2] if first_game > 1 else 0
         game_number = first_game
 
         for i in range(start,len(self.moves)):
@@ -408,6 +414,7 @@ class ChessDecoder:
             self._board.push_uci(header_move)
 
     def _decode_game_meta(self, game):
+        self._board.reset()
         game_number = 0
 
         #first ply
