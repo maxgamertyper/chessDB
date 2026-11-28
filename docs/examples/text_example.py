@@ -17,6 +17,7 @@ def upload_chapter(encodearray, chapter_name):
 
     chapter_link = bot.upload_table(table, chapter_name)
     print(chapter_link)
+    return chapter_link
 
 
 def read_chapter(study_id):
@@ -25,6 +26,7 @@ def read_chapter(study_id):
     decoder = ChessDecoder(read_table)
     out_data = decoder.decodeData()
     print(out_data)
+    return out_data
 
 if __name__ == "__main__":
     #upload_chapter(b"According to all known laws of aviation, there is no way a bee should be able to fly. Its wings are too small to get its fat little body off the ground. The bee, of course, flies anyway, because bees don't care what humans think is impossible.", "beeBIT")
